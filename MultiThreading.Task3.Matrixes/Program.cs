@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Drawing;
 using MultiThreading.Task3.MatrixMultiplier.Matrices;
 using MultiThreading.Task3.MatrixMultiplier.Multipliers;
 
@@ -27,8 +28,11 @@ namespace MultiThreading.Task3.MatrixMultiplier
         private static void CreateAndProcessMatrices(byte sizeOfMatrix)
         {
             Console.WriteLine("Multiplying...");
-            var firstMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
-            var secondMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
+            //var firstMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
+            //var secondMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix);
+
+            Matrix firstMatrix = CreateRandomMatrix(sizeOfMatrix, sizeOfMatrix);
+            Matrix secondMatrix = CreateRandomMatrix(sizeOfMatrix, sizeOfMatrix);
 
             IMatrix resultMatrix = new MatricesMultiplier().Multiply(firstMatrix, secondMatrix);
 
@@ -38,6 +42,20 @@ namespace MultiThreading.Task3.MatrixMultiplier
             secondMatrix.Print();
             Console.WriteLine("resultMatrix:");
             resultMatrix.Print();
+        }
+
+        private static Matrix CreateRandomMatrix(int rows, int cols)
+        {
+            var matrix = new Matrix(rows, cols);
+            var rand = new Random();
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    matrix.SetElement(i, j, rand.Next(1, 10));
+                }
+            }
+            return matrix;
         }
     }
 }

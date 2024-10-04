@@ -20,7 +20,63 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
         {
             // todo: implement a test method to check the size of the matrix which makes parallel multiplication more effective than
             // todo: the regular one
+        
+            const int maxSize = 1000; // Adjust this for larger sizes
+            const int iterations = 10;
+
+            long syncTime = 0;
+            long parallelTime = 0;
+
+            for (int size = 100; size <= maxSize; size += 100)
+            {
+                var m1 = CreateRandomMatrix(size, size);
+                var m2 = CreateRandomMatrix(size, size);
+
+                // Measure synchronous multiplication
+                var syncMultiplier = new MatricesMultiplier();
+                var watchSync = System.Diagnostics.Stopwatch.StartNew();
+                for (int i = 0; i < iterations; i++)
+                {
+                    syncMultiplier.Multiply(m1, m2);
+                }
+                watchSync.Stop();
+                syncTime = watchSync.ElapsedMilliseconds;
+
+                // Measure parallel multiplication
+                var parallelMultiplier = new MatricesMultiplierParallel();
+                var watchParallel = System.Diagnostics.Stopwatch.StartNew();
+                for (int i = 0; i < iterations; i++)
+                {
+                    parallelMultiplier.Multiply(m1, m2);
+                }
+                watchParallel.Stop();
+                parallelTime = watchParallel.ElapsedMilliseconds;
+
+                Console.WriteLine($"Matrix size: {size} | Sync Time: {syncTime} ms | Parallel Time: {parallelTime} ms");
+
+                // Check if parallel is faster
+                if (parallelTime < syncTime)
+                {
+                    Assert.IsTrue(true, $"Parallel multiplication is faster for matrix size {size}");
+                    break;
+                }
+            }
         }
+
+        private Matrix CreateRandomMatrix(int rows, int cols)
+        {
+            var matrix = new Matrix(rows, cols);
+            var rand = new Random();
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    matrix.SetElement(i, j, rand.Next(1, 10));
+                }
+            }
+            return matrix;
+        }
+
 
         #region private methods
 

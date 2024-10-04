@@ -19,6 +19,8 @@ namespace MultiThreading.Task3.MatrixMultiplier.Matrices
         public long RowCount { get; }
 
         public long ColCount { get; }
+        public object Columns { get; set; }
+        public object Rows { get; set; }
 
         #endregion
 
